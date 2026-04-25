@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Track Order</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+
+<h2>Track Order</h2>
+
+<input id="orderId" placeholder="Enter Order ID">
+<button onclick="trackOrder()">Track</button>
+
+<br><br>
+
+<div id="result"></div>
+
+<br>
+<button onclick="goBack()">Back</button>
+
+<script>
+if (localStorage.getItem("loggedIn") !== "true") {
+  window.location.href = "/";
+}
+
+function trackOrder() {
+  const id = document.getElementById("orderId").value;
+
+  let orders = JSON.parse(localStorage.getItem("orders")) || [];
+
+  let order = orders.find(o => o.id === id);
+
+  if (!order) {
+    document.getElementById("result").innerText = "Order not found";
+    return;
+  }
+
+  document.getElementById("result").innerHTML =
+    "Status: " + order.status + "<br>" +
+    "Product: " + order.product + "<br>" +
+    "Quantity: " + order.quantity;
+}
+
+function goBack() {
+  window.location.href = "/dashboard";
+}
+</script>
+
+</body>
+</html>

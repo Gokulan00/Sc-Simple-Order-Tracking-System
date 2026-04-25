@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Place Order</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+
+<h2>Place Order</h2>
+
+<input id="product" placeholder="Enter product"><br><br>
+<input id="quantity" placeholder="Enter quantity"><br><br>
+
+<button onclick="placeOrder()">Place</button>
+
+<br><br>
+<button onclick="goBack()"> Back</button>
+
+<script>
+if (localStorage.getItem("loggedIn") !== "true") {
+  window.location.href = "/";
+}
+
+function generateId() {
+  return "ORD" + Math.floor(Math.random() * 100000);
+}
+
+function placeOrder() {
+  const product = document.getElementById("product").value;
+  const quantity = document.getElementById("quantity").value;
+
+  if (!product || !quantity) {
+    alert("Enter product & quantity");
+    return;
+  }
+
+  const order = {
+    id: generateId(),
+    product,
+    quantity,
+    status: "Placed"
+  };
+
+  let orders = JSON.parse(localStorage.getItem("orders")) || [];
+
+  orders.push(order);
+
+  localStorage.setItem("orders", JSON.stringify(orders));
+
+  alert("Order placed! ID: " + order.id);
+
+  window.location.href = "/dashboard";
+}
+
+function goBack() {
+  window.location.href = "/dashboard";
+}
+</script>
+
+</body>
+</html>

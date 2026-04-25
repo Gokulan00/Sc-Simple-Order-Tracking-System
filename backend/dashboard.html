@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Dashboard</title>
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+
+<div class="wrapper">
+
+<div class="sidebar">
+<h2> Order Tracking</h2>
+
+<a href="/dashboard">Dashboard</a>
+<a href="/place">Place Order</a>
+<a href="/track">Track Order</a>
+<a href="#" onclick="logout()">Logout</a>
+</div>
+
+<div class="main">
+
+<div class="top">
+<h1 id="welcome"></h1>
+<p>Manage your orders easily</p>
+</div>
+
+<div class="cards">
+<div class="card"> Place Order</div>
+<div class="card"> Track Order</div>
+<div class="card"> My Orders</div>
+</div>
+
+<div class="orders">
+<h2>Recent Orders</h2>
+<div id="ordersBox"></div>
+</div>
+
+</div>
+</div>
+
+<script>
+document.getElementById("welcome").innerText =
+"Welcome " + localStorage.getItem("userEmail");
+
+function loadOrders(){
+let orders = JSON.parse(localStorage.getItem("orders")) || [];
+
+if(orders.length==0){
+document.getElementById("ordersBox").innerHTML="No orders yet";
+return;
+}
+
+let html="";
+
+orders.forEach((o,index)=>{
+html+=`
+<div class="order-box">
+ID: ${o.id}<br>
+Product: ${o.product}<br>
+Qty: ${o.quantity}<br>
+Status: ${o.status}<br><br>
+<button onclick="updateStatus(${index})">Next Status</button>
+</div>
+`;
+});
+
+document.getElementById("ordersBox").innerHTML=html;
+}
+
+function updateStatus(index){
+let orders = JSON.parse(localStorage.getItem("orders"));
+
+if(orders[index].status=="Placed")
+orders[index].status="Shipped";
+else if(orders[index].status=="Shipped")
+orders[index].status="Delivered";
+
+localStorage.setItem("orders",JSON.stringify(orders));
+loadOrders();
+}
+
+function logout(){
+localStorage.clear();
+window.location.href="/";
+}
+
+loadOrders();
+</script>
+
+</body>
+</html>
